@@ -194,13 +194,13 @@ class Confirm extends Component  {
     const duration = Math.round(performance.now() - this.startTime)
     sendEvent('Completed upload', {duration, method: this.props.method})
     this.setState({onfidoId: apiResponse.id})
-    const warnings = apiResponse.sdk_warnings
-    if (warnings && !warnings.detect_glare.valid) {
+    const warnings = apiResponse.sdk_warnings || {}
+    actions.setCaptureRemoteId({ captureId, remoteId: apiResponse.id })
+    if (warnings && warnings.detect_glare.valid) {
       this.setState({uploadInProgress: false})
       this.onGlareWarning()
     }
     else {
-      actions.setCaptureRemoteId({ captureId, remoteId: apiResponse.id })
       setTimeout(this.props.nextStep, 0)
     }
   }
